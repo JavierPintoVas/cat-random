@@ -10,7 +10,6 @@
     "escape-string-regexp": "^1.0.5",
     "filename-reserved-regex": "^2.0.0",
     "find-up": "^4.1.0",
-    "gh-pages": "^6.3.0",
     "ignore": "^5.3.2",
     "glob-parent": "^5.1.2",
     "is-glob": "^4.0.3",
@@ -28,7 +27,9 @@
     "pkg-dir": "^4.2.0",
     "graceful-fs": "^4.2.11"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "gh-pages": "^6.3.0"
+  },
   "scripts": {
     "deploy": "gh-pages -d src"
   },
