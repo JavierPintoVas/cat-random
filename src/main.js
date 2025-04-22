@@ -1,10 +1,12 @@
-const API_URL_RANDOM = 'https://api.thecatapi.com/v1/images/search?limit=2';
-const API_URL_FAVORITES =
-  'https://api.thecatapi.com/v1/favourites?api_key=live_mhsnlAKdtvh1lt3fV2AM5ihT0XIIoUUmUClhOKJxm2j3Y7rk3le4Gl3epcEv5op3';
+const API_URL_RANDOM = 'https://api.thecatapi.com/v1/images/search?limit=10';
+const API_URL_FAVORITES = 'https://api.thecatapi.com/v1/favourites';
+const API_URL_UPLOAD = 'https://api.thecatapi.com/v1/images/upload';
 const API_URL_FAVORITES_DELETE = (id) =>
-  `https://api.thecatapi.com/v1/favourites/${id}?api_key=live_mhsnlAKdtvh1lt3fV2AM5ihT0XIIoUUmUClhOKJxm2j3Y7rk3le4Gl3epcEv5op3`;
+  `https://api.thecatapi.com/v1/favourites/${id}`;
 
 const spanError = document.getElementById('error');
+const API_KEY =
+  'live_mhsnlAKdtvh1lt3fV2AM5ihT0XIIoUUmUClhOKJxm2j3Y7rk3le4Gl3epcEv5op3';
 
 async function loadRandomMichis() {
   const res = await fetch(API_URL_RANDOM);
@@ -15,21 +17,36 @@ async function loadRandomMichis() {
   if (res.status !== 200) {
     spanError.innerHTML = 'Hubo un error: ' + res.status;
   } else {
-    const img1 = document.getElementById('img1');
-    const img2 = document.getElementById('img2');
-    const btn1 = document.getElementById('btn1');
-    const btn2 = document.getElementById('btn2');
+    const section = document.getElementById('randomMichisGrid');
+    section.innerHTML = '';
 
-    img1.src = data[0].url;
-    img2.src = data[1].url;
+    data.forEach((michi) => {
+      const article = document.createElement('article');
+      article.classList.add('michi-card');
 
-    btn1.onclick = () => saveFavoriteMichis(data[0].id);
-    btn2.onclick = () => saveFavoriteMichis(data[1].id);
+      const img = document.createElement('img');
+      img.src = michi.url;
+      img.alt = 'Foto gatito aleatorio';
+      img.width = 300;
+
+      const btn = document.createElement('button');
+      btn.textContent = 'Guardar michi en favoritos';
+      btn.onclick = () => saveFavoriteMichis(michi.id);
+
+      article.appendChild(img);
+      article.appendChild(btn);
+      section.appendChild(article);
+    });
   }
 }
 
 async function loadFavoritesMichis() {
-  const res = await fetch(API_URL_FAVORITES);
+  const res = await fetch(API_URL_FAVORITES, {
+    method: 'GET',
+    headers: {
+      'X-API-KEY': API_KEY,
+    },
+  });
   const data = await res.json();
   console.log('Favoritos');
   console.log(data);
@@ -39,24 +56,32 @@ async function loadFavoritesMichis() {
   } else {
     const section = document.getElementById('favoriteMichis');
     section.innerHTML = '';
+
     const h2 = document.createElement('h2');
-    const h2Text = document.createTextNode('Michis favoritos');
-    h2.appendChild(h2Text);
+    h2.textContent = 'Michis favoritos';
     section.appendChild(h2);
+
+    const grid = document.createElement('div');
+    grid.classList.add('michi-grid');
 
     data.forEach((michi) => {
       const article = document.createElement('article');
+      article.classList.add('michi-card');
+
       const img = document.createElement('img');
-      const btn = document.createElement('button');
-      const btnText = document.createTextNode('Sacar al michi de favoritos');
-      btn.onclick = () => deleteFavoriteMichi(michi.id);
-      btn.appendChild(btnText);
-      img.width = 150;
       img.src = michi.image.url;
+      img.width = 150;
+
+      const btn = document.createElement('button');
+      btn.textContent = 'Eliminar michi de favoritos';
+      btn.onclick = () => deleteFavoriteMichi(michi.id);
+
       article.appendChild(img);
       article.appendChild(btn);
-      section.appendChild(article);
+      grid.appendChild(article);
     });
+
+    section.appendChild(grid);
   }
 }
 
@@ -65,12 +90,10 @@ async function saveFavoriteMichis(id) {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
+      'X-API-KEY': API_KEY,
     },
-    body: JSON.stringify({
-      image_id: id,
-    }),
+    body: JSON.stringify({ image_id: id }),
   });
-  const data = await res.json();
 
   console.log('Save');
   console.log(res);
@@ -86,14 +109,39 @@ async function saveFavoriteMichis(id) {
 async function deleteFavoriteMichi(id) {
   const res = await fetch(API_URL_FAVORITES_DELETE(id), {
     method: 'DELETE',
+    headers: {
+      'X-API-KEY': API_KEY,
+    },
   });
-  const data = await res.json();
 
   if (res.status !== 200) {
     spanError.innerHTML = 'Hubo un error: ' + res.status;
   } else {
     console.log('Michi eliminado de Favoritos');
     loadFavoritesMichis();
+  }
+}
+
+async function uploadMichiPhoto() {
+  const form = document.getElementById('uploadingForm');
+  const formData = new FormData(form);
+
+  const res = await fetch(API_URL_UPLOAD, {
+    method: 'POST',
+    headers: {
+      'X-API-KEY': API_KEY,
+    },
+    body: formData,
+  });
+
+  const data = await res.json();
+
+  if (res.status !== 201) {
+    spanError.innerHTML = `Hubo un error al subir michi: ${res.status} ${data.message}`;
+  } else {
+    console.log('Foto de michi cargada :)');
+    console.log(data);
+    saveFavoriteMichis(data.id);
   }
 }
 

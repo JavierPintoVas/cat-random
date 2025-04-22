@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
   <head>
     <meta charset="UTF-8" />
     <meta
@@ -7,45 +7,45 @@
       content="width=device-width, initial-scale=1.0"
     />
     <title>Michis App</title>
+    <link
+      rel="stylesheet"
+      href="styles.css"
+    />
   </head>
   <body>
     <h1>Michis App</h1>
     <span id="error"></span>
+
     <section id="randomMichis">
       <h2>Gatitos Aleatorios</h2>
-      <button onclick="loadRandomMichis()">¡Gatito!</button>
+      <button onclick="loadRandomMichis()">¡Cargar más gatitos!</button>
+      <div
+        id="randomMichisGrid"
+        class="michi-grid"
+      ></div>
+    </section>
 
-      <article>
-        <img
-          id="img1"
-          alt="Foto gatito aleatorio"
-          width="300"
+    <section id="uploadingMichi">
+      <h2>Sube la foto de tu michi</h2>
+      <form id="uploadingForm">
+        <input
+          type="file"
+          id="file"
+          name="file"
         />
-        <button id="btn1">Guardar michi en favoritos</button>
-      </article>
-      <article>
-        <img
-          id="img2"
-          alt="Foto gatito aleatorio"
-          width="300"
-        />
-        <button id="btn2">Guardar michi en favoritos</button>
-      </article>
+        <button
+          type="button"
+          onclick="uploadMichiPhoto()"
+        >
+          Subir foto de michi
+        </button>
+      </form>
     </section>
 
     <section id="favoriteMichis">
       <h2>Michis favoritos</h2>
-      <article>
-        <img
-          id="img3"
-          alt="Foto gatito aleatorio"
-          width="150"
-        />
-        <button>Eliminar michi de favoritos</button>
-      </article>
     </section>
 
-    <hr />
     <script src="./main.js"></script>
   </body>
 </html>
