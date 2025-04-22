@@ -6,27 +6,46 @@
       name="viewport"
       content="width=device-width, initial-scale=1.0"
     />
-    <title>Gatitos aleatorios</title>
+    <title>Michis App</title>
   </head>
   <body>
-    <h1>Gatitos aleatorios</h1>
-    <button onclick="getCat()">¡Gatito!</button>
+    <h1>Michis App</h1>
+    <span id="error"></span>
+    <section id="randomMichis">
+      <h2>Gatitos Aleatorios</h2>
+      <button onclick="loadRandomMichis()">¡Gatito!</button>
+
+      <article>
+        <img
+          id="img1"
+          alt="Foto gatito aleatorio"
+          width="300"
+        />
+        <button id="btn1">Guardar michi en favoritos</button>
+      </article>
+      <article>
+        <img
+          id="img2"
+          alt="Foto gatito aleatorio"
+          width="300"
+        />
+        <button id="btn2">Guardar michi en favoritos</button>
+      </article>
+    </section>
+
+    <section id="favoriteMichis">
+      <h2>Michis favoritos</h2>
+      <article>
+        <img
+          id="img3"
+          alt="Foto gatito aleatorio"
+          width="150"
+        />
+        <button>Eliminar michi de favoritos</button>
+      </article>
+    </section>
+
     <hr />
-    <img
-      id="img1"
-      alt="Foto gatito aleatorio"
-      width="300"
-    />
-    <img
-      id="img2"
-      alt="Foto gatito aleatorio"
-      width="300"
-    />
-    <img
-      id="img3"
-      alt="Foto gatito aleatorio"
-      width="300"
-    />
     <script src="./main.js"></script>
   </body>
 </html>
